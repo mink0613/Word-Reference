@@ -1,82 +1,37 @@
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
+import java.util.ArrayList;
 
 public class Main {
 
 	public static void main(String[] args) throws Exception {
 		
-		Document doc = Jsoup.connect("http://www.wordreference.com/enko/taste").get();
-		Element result = doc.getElementsByClass("WRD").first();
-		Elements items = result.select("tr");
+		printResults(API.Search("en", "ko", "taste"));
+		printResults(API.Search("en", "ko", "word"));
+		printResults(API.Search("en", "ko", "awesome"));
+		printResults(API.Search("en", "ko", "let's go"));
+		printResults(API.Search("en", "ko", "apartment"));
+		printResults(API.Search("en", "ko", "considering that"));
+		printResults(API.Search("en", "ko", "social"));
+		printResults(API.Search("en", "ko", "rib"));
+		printResults(API.Search("en", "ko", "in the first place"));
+		printResults(API.Search("en", "ko", "region"));
+	}
+	
+	private static void printResults(ArrayList<Word> meanings) {
 		
-		int upToResult = 3;
-		int foundResult = 0;
-		
-		for (int i = 0; i < items.size(); i++) {
+		System.out.println("*************************************************************************************");
+		for (int i = 0; i < meanings.size(); i++) {
 			
-			Element wordTR = items.get(i);
-			if (!wordTR.className().equals("odd") && !wordTR.className().equals("even")) {
-				
-				System.out.println(wordTR.className() + " is skipped");
-				continue;
-			}
+			Word meaning = meanings.get(i);
 			
 			String strResult = "";
 			
-			Element word = wordTR.getElementsByClass("ToWrd").first();
-			if (word == null) {
-				
-				continue;
-			}
-			
-			int tempI = i;
-			strResult += "Korean: ";
-			do {
-				
-				strResult += word.ownText() + ", ";
-				tempI++;
-				word = items.get(tempI).getElementsByClass("ToWrd").first();
-			} while (word != null);
-			
-			strResult = strResult.substring(0, strResult.length() - 2);
-			strResult += "\t";
-			i = tempI;
-			
-			//i++; 
-			// Next tr contains example in eng
-			Element fromExTR = items.get(i);
-			Element frex = fromExTR.getElementsByClass("FrEx").first();
-			if (frex == null) {
-				
-				continue;
-			}
-			strResult += "From Ex: " + frex.text() + "\t";
-			
-			i++; // Next tr contains example in kor
-			Element toExTR = items.get(i);
-			Element toex = toExTR.getElementsByClass("ToEx").first();
-			if (toex == null) {
-				
-				continue;
-			}
-			strResult += "To Ex: " + toex.text() + "\t";
+			strResult += "From: " + meaning.getWordFrom() + "\t";
+			strResult += "To: " + meaning.getWordTo() + "\n";
+			strResult += "Example From: " + meaning.getExampleFrom() + "\t";
+			strResult += "Example To: " + meaning.getExampleTo();
 			
 			System.out.println(strResult);
-			
-			foundResult++;
-			
-			if (foundResult == upToResult) {
-				
-				System.out.println("Stopped");
-				break;
-			} else {
-				
-				System.out.println("Found result: " + foundResult);
-			}
 		}
-		/*String result = Http.Get("http://www.wordreference.com/enko/taste");
-		System.out.println(result);*/
+		System.out.println("*************************************************************************************\n");
 	}
 }

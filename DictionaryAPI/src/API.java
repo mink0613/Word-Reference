@@ -1,0 +1,106 @@
+import java.util.ArrayList;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
+public class API {
+
+	private static final int SEARCH_MAX = 3;
+	
+	private static final String BASE_URL = "http://www.wordreference.com/";
+	
+	public static ArrayList<Word> Search(String langFrom, String langTo, String searchWord) throws Exception {
+		
+		ArrayList<Word> meanings = new ArrayList<>();
+		
+		String url = BASE_URL + langFrom + langTo + "/" + searchWord;
+		
+		Document doc = Jsoup.connect(url).get();
+		Element result = doc.getElementsByClass("WRD").first();
+		Elements items = result.select("tr");
+		
+		int foundResult = 0;
+		
+		for (int i = 0; i < items.size(); i++) {
+		
+			Element wordTR = items.get(i);
+			if (!wordTR.className().equals("odd") && !wordTR.className().equals("even")) {
+				
+				continue;
+			}
+			
+			Element word = wordTR.getElementsByClass("ToWrd").first();
+			if (word == null) {
+				
+				continue;
+			}
+			
+			String strResult = "";
+			Word meaning = new Word();
+			meanings.add(meaning);
+			
+			meaning.setLangFrom(langFrom);
+			meaning.setLangTo(langTo);
+			
+			int tempI = i;
+			do {
+				
+				strResult += word.ownText() + ", ";
+				tempI++;
+				if (tempI >= items.size()) {
+					
+					break;
+				}
+				
+				word = items.get(tempI).getElementsByClass("ToWrd").first();
+			} while (word != null);
+			
+			strResult = strResult.substring(0, strResult.length() - 2);
+			
+			meaning.setWordFrom(searchWord);
+			meaning.setWordTo(strResult);
+			
+			i = tempI;
+			
+			if (i >= items.size()) {
+				
+				break;
+			}
+			
+			//i++; 
+			// Next tr contains example in eng
+			Element fromExTR = items.get(i);
+			Element frex = fromExTR.getElementsByClass("FrEx").first();
+			if (frex != null) {
+				
+				meaning.setExampleFrom(frex.text().trim());
+			}
+			
+			i++; // Next tr contains example in kor
+			
+			if (i >= items.size()) {
+				
+				break;
+			}
+
+			Element toExTR = items.get(i);
+			Element toex = toExTR.getElementsByClass("ToEx").first();
+			if (toex != null) {
+				
+				meaning.setExampleTo(toex.text().trim());
+			}
+			
+			//meanings.add(meaning);
+			foundResult++;
+			
+			if (foundResult == SEARCH_MAX) {
+				
+				break;
+			}
+		}
+		
+		return meanings;
+	}
+}
