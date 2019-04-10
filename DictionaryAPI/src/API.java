@@ -25,6 +25,14 @@ public class API {
 			
 			return meanings;
 		}
+
+		// Try to get pronunciation of searching word
+		Element pronun = doc.getElementById("pronWR");
+		String pronunStr = "";
+		if (pronun != null) {
+			
+			pronunStr = pronun.text();
+		}
 		
 		Elements items = result.select("tr");
 		
@@ -64,6 +72,7 @@ public class API {
 			
 			meaning.setLangFrom(langFrom);
 			meaning.setLangTo(langTo);
+			meaning.setPronunciation(pronunStr);
 			
 			int tempI = i;
 			do {
@@ -78,6 +87,7 @@ public class API {
 				toWord = items.get(tempI).getElementsByClass("ToWrd").first();
 			} while (toWord != null);
 			
+			// Remove ending ", "
 			strResult = strResult.substring(0, strResult.length() - 2);
 			
 			meaning.setWordFrom(searchWord);
@@ -139,6 +149,14 @@ public class API {
 			return meanings;
 		}
 		
+		// Try to get pronunciation of searching word
+		Element pronun = doc.getElementById("pronWR");
+		String pronunStr = "";
+		if (pronun != null) {
+			
+			pronunStr = pronun.text();
+		}
+		
 		for (int index = 0; index < results.size(); index++) {
 			
 			Element result = results.get(index);
@@ -185,6 +203,7 @@ public class API {
 				
 				meaning.setLangFrom(langFrom);
 				meaning.setLangTo(langTo);
+				meaning.setPronunciation(pronunStr);
 				
 				int tempI = i;
 				do {
@@ -199,6 +218,7 @@ public class API {
 					toWord = items.get(tempI).getElementsByClass("ToWrd").first();
 				} while (toWord != null);
 				
+				// Remove ending ", "
 				strResult = strResult.substring(0, strResult.length() - 2);
 				
 				meaning.setWordFrom(searchWord);

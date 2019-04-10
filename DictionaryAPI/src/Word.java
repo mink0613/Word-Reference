@@ -9,6 +9,8 @@ public class Word {
 	
 	private String wordTo;
 	
+	private String pronunciation;
+	
 	private String exampleFrom;
 	
 	private String exampleTo;
@@ -31,6 +33,11 @@ public class Word {
 	public void setWordTo(String to) {
 		
 		wordTo = to;
+	}
+	
+	public void setPronunciation(String pronun) {
+		
+		pronunciation = pronun;
 	}
 	
 	public void setExampleFrom(String from) {
@@ -61,6 +68,11 @@ public class Word {
 	public String getWordTo() {
 		
 		return wordTo;
+	}
+	
+	public String getPronunciation() {
+		
+		return pronunciation;
 	}
 	
 	public String getExampleFrom() {

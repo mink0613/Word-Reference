@@ -9,11 +9,11 @@ public class Main {
 	public static void main(String[] args) throws Exception {
 		
 		//readWordFile();
-		testToeicWords();
+		//testToeicWords();
 		/*String test = "아dd zz하하하korean좋11아!!!";
 		System.out.println(test.replaceAll("[^a-zA-Z ]+", ""));*/
 		
-		//printResults(API.SearchFull("en", "ko", "moslem"));
+		printResults(API.SearchFull("en", "ko", "moslem"));
 		/*printResults(API.Search("en", "ko", "taste"));
 		printResults(API.Search("en", "ko", "word"));
 		printResults(API.Search("en", "ko", "awesome"));
@@ -99,6 +99,7 @@ public class Main {
 			String strResult = "";
 			
 			strResult += "From: " + meaning.getWordFrom() + "\t";
+			strResult += "Prononciation: " + meaning.getPronunciation() + "\t";
 			strResult += "To: " + meaning.getWordTo() + "\n";
 			strResult += "Example From: " + meaning.getExampleFrom() + "\t";
 			strResult += "Example To: " + meaning.getExampleTo();
